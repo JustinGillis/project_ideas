@@ -11,6 +11,7 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dumb_project_ideas.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['IMAGE_UPLOADS'] = Path("C:/Users/Justin/OneDrive/coding_dojo/projects/dumb_project_ideas/static/img")
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -64,14 +65,12 @@ class Comment(db.Model):
 
 # TODO STEPS
 # fix delete comment code
-# add filters
-# add icons?
-# log in after register
+# add icons? - thumbs up and down like/unlike buttons on project card
 # fix responsive nav bar
 # style view project page, maybe add more info like created at
 # change posistion of card text
 # modularize
-# add validations
+# add validations to forms and manual url
 
 # TODO BACKLOG
 # add option and fuctionality to add profile pics and show them somewhere
@@ -81,42 +80,10 @@ class Comment(db.Model):
 # add single user view page with user stats (does showing the users projects here make sense?)
 # change created by: text to a link to single user view page
 # add jquery
-# add os files 
+# add os files for user uploads
 # can repurpose into a site where ppl vote on project ideas so people can see if they should do them or not
 
 
-@app.route('/')
-def projects():
-    if 'userid' in session:
-        user = User.query.get(session['userid'])
-        users = User.query.all()
-        users_pinned_projects = user.projects_this_user_pinned
-        project_likes = Project.query.order_by(Project.num_likes.desc()).all()
-        return render_template('projects.html', user=user, users=users, projects=project_likes, users_pinned_projects=users_pinned_projects)
-    else:
-        users = User.query.all()
-        project_likes = Project.query.order_by(Project.num_likes.desc()).all()
-        return render_template('projects.html', users=users, projects=project_likes)
-
-
-@app.route('/my_projects')
-def my_projects():
-    projects = Project.query.filter_by(author_id=session['userid']).all()
-    return render_template('my_projects.html', projects=projects)
-
-@app.route('/Order_by_date')
-def Order_by_date():
-    if 'userid' in session:
-        user = User.query.get(session['userid'])
-        users_pinned_projects = user.projects_this_user_pinned
-        projects = Project.query.order_by(Project.id.desc()).all()
-        return render_template('ordered_by_date.html', projects=projects, users_pinned_projects=users_pinned_projects)
-    else:
-        projects = Project.query.order_by(Project.id.desc()).all()
-        return render_template('ordered_by_date.html', projects=projects)
-
-
-# add validations & login
 @app.route('/on_register', methods=['POST'])
 def on_register():
     is_valid = True
@@ -140,13 +107,58 @@ def on_login():
         session['userid'] = user.id
         return redirect('/')
 
+@app.route('/')
+def projects():
+    if 'userid' in session:
+        user = User.query.get(session['userid'])
+        users = User.query.all()
+        users_pinned_projects = user.projects_this_user_pinned
+        project_likes = Project.query.order_by(Project.num_likes.desc()).all()
+        return render_template('projects.html', user=user, users=users, projects=project_likes, users_pinned_projects=users_pinned_projects)
+    else:
+        users = User.query.all()
+        project_likes = Project.query.order_by(Project.num_likes.desc()).all()
+        return render_template('projects.html', users=users, projects=project_likes)
+
+@app.route('/on_pin/<id>')
+def on_pin(id):
+    existing_project = Project.query.get(id)
+    existing_user = User.query.get(session['userid'])
+    existing_user.projects_this_user_pinned.append(existing_project)
+    db.session.commit()
+    print('on pin complete')
+    return redirect('/view_project/' + id)
+
+@app.route('/on_unpin/<id>')
+def on_unpin(id):
+    existing_project = Project.query.get(id)
+    existing_user = User.query.get(session['userid'])
+    existing_user.projects_this_user_pinned.remove(existing_project)
+    db.session.commit()
+    return redirect('/view_project/' + id)
+
+@app.route('/my_projects')
+def my_projects():
+    projects = Project.query.filter_by(author_id=session['userid']).all()
+    return render_template('my_projects.html', projects=projects)
+
+@app.route('/Order_by_date')
+def Order_by_date():
+    if 'userid' in session:
+        user = User.query.get(session['userid'])
+        users_pinned_projects = user.projects_this_user_pinned
+        projects = Project.query.order_by(Project.id.desc()).all()
+        return render_template('ordered_by_date.html', projects=projects, users_pinned_projects=users_pinned_projects)
+    else:
+        projects = Project.query.order_by(Project.id.desc()).all()
+        return render_template('ordered_by_date.html', projects=projects)
+
 @app.route('/project_form')
 def project_form():
     if 'userid' not in session:
         return redirect('/')
     return render_template('add_project.html')
 
-app.config['IMAGE_UPLOADS'] = Path("C:/Users/Justin/OneDrive/coding_dojo/projects/dumb_project_ideas/static/img")
 
 @app.route('/on_add_project', methods=['POST'])
 def on_add_project():
@@ -208,22 +220,7 @@ def on_delete_comment(project, id):
     db.session.commit()
     return redirect('/view_project/' + project)
 
-@app.route('/on_pin/<id>')
-def on_pin(id):
-    existing_project = Project.query.get(id)
-    existing_user = User.query.get(session['userid'])
-    existing_user.projects_this_user_pinned.append(existing_project)
-    db.session.commit()
-    print('on pin complete')
-    return redirect('/view_project/' + id)
 
-@app.route('/on_unpin/<id>')
-def on_unpin(id):
-    existing_project = Project.query.get(id)
-    existing_user = User.query.get(session['userid'])
-    existing_user.projects_this_user_pinned.remove(existing_project)
-    db.session.commit()
-    return redirect('/view_project/' + id)
 
 @app.route('/on_logout')
 def logout():
