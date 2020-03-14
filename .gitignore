@@ -1,0 +1,7 @@
+my_environments/
+*.txt
+*.zip
+*.db
+__pycache__
+vscode/
+migrations/

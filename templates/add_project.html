@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/ab10a33f6d.js" crossorigin="anonymous"></script>
+    <title>Add a Project</title>
+</head>
+
+<body>
+    <!-- nav bar -->
+    <nav class="navbar navbar-expand-lg navbar-secondary" style="background-color: rgb(84, 45, 94);">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                {% if 'userid' not in session %}
+                <!-- sign up dropdown -->
+                <div class="dropdown show mr-3">
+                    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                        
+                    </a>
+                        <form action="/on_register" method="post" style="width: 300px;" class="dropdown-menu p-4">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" name="username" id="username"
+                                    placeholder="Username">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="email" id="email"
+                                    placeholder="example@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" name="password" id="password"
+                                    placeholder="Password">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm_password">Confirm Password</label>
+                                <input type="password" class="form-control" name="confirm_password"
+                                    id="confirm_password" placeholder="Confirm password">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Sign Up</button>
+                        </form>
+                </div>
+                <!-- sign in dropdown -->
+                <div class="dropdown show">
+                    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </a>
+                    <form action="/on_login" method="post" style="width: 300px;" class="dropdown-menu p-4">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" name="username" id="username"
+                                placeholder="Username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" name="password" id="password"
+                                placeholder="Password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign in</button>
+                    </form>
+                </div>
+                {% else %}
+                <a class="btn btn-primary" role="button" href="/on_logout">Log Out</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    
+
+    <h1 class="text-center display-3" style="margin: 50px 0;">Dumb Project Ideas</h1>
+
+    <!-- main content nav bar tabs -->
+    <ul class="nav nav-tabs justify-content-center" style="margin-bottom: 40px;">
+        <a class="nav-item nav-link active" href="/project_form">New Project</a>
+        {% if 'userid' in session %}
+        <a class="nav-item nav-link" href="/my_projects">My Projects</a>
+        {% endif %}
+        <a class="nav-item nav-link " href="/">All Projects</a>
+    </ul>
+
+    <!-- <div class="container">
+        <p>Add a Project Image</p>
+        <form action="/add_image" method="post" style="margin-bottom: 15px;" enctype="multipart/form-data">
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="image" id="image">
+                    <label class="custom-file-label" for="image">Choose Image</label>
+                </div>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Upload</button>
+                </div>
+            </div>
+        </form>
+    </div> -->
+
+    <div class="container mb-5">
+        <form action="/on_add_project" method="post" enctype="multipart/form-data">
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="image" id="image">
+                    <label class="custom-file-label" for="image">Choose Image</label>
+                </div>
+                <!-- <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Upload</button>
+                </div> -->
+            </div>
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" name="title" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" name="description" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="instructions">Instructions</label>
+                <textarea class="form-control" name="instructions" rows="10"></textarea>
+            </div>
+            <input class="btn btn-primary" type="submit" value="Add Project">
+        </form>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>

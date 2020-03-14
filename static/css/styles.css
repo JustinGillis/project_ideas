@@ -1,0 +1,7 @@
+body {
+    filter: invert(1);
+    filter: hue-rotate(180deg);  
+}
+h1 {
+    color: blue;
+}

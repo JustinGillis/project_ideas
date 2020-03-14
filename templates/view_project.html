@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/ab10a33f6d.js" crossorigin="anonymous"></script>
+    <title>View Project</title>
+</head>
+
+<body>
+    <!-- nav bar -->
+    <nav class="navbar navbar-expand-lg navbar-secondary" style="background-color: rgb(84, 45, 94);">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                {% if 'userid' not in session %}
+                <!-- sign up dropdown -->
+                <div class="dropdown show mr-3">
+                    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                        
+                    </a>
+                        <form action="/on_register" method="post" style="width: 300px;" class="dropdown-menu p-4">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" name="username" id="username"
+                                    placeholder="Username">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="email" id="email"
+                                    placeholder="example@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" name="password" id="password"
+                                    placeholder="Password">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm_password">Confirm Password</label>
+                                <input type="password" class="form-control" name="confirm_password"
+                                    id="confirm_password" placeholder="Confirm password">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Sign Up</button>
+                        </form>
+                </div>
+                <!-- sign in dropdown -->
+                <div class="dropdown show">
+                    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </a>
+                    <form action="/on_login" method="post" style="width: 300px;" class="dropdown-menu p-4">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" name="username" id="username"
+                                placeholder="Username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" name="password" id="password"
+                                placeholder="Password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign in</button>
+                    </form>
+                </div>
+                {% else %}
+                <a class="btn btn-primary" role="button" href="/on_logout">Log Out</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    
+
+    <h1 class="text-center display-3" style="margin: 50px 0;">Dumb Project Ideas</h1>
+
+    <!-- main content nav bar tabs -->
+    <ul class="nav nav-tabs justify-content-center" style="margin-bottom: 40px;">
+        {% if 'userid' in session %}
+        <a class="nav-item nav-link" href="/project_form">New Project</a>
+        {% endif %}
+        {% if 'userid' in session %}
+        <a class="nav-item nav-link" href="/my_projects">My Projects</a>
+        {% endif %}
+        <a class="nav-item nav-link" href="/">All Projects</a>
+        <a class="nav-item nav-link active" href="/view_project/{{project.id}}">{{project.title}}</a>
+        {% if 'userid' in session %}
+        {% if project in user.projects_this_user_likes %}
+        <a class="nav-item nav-link text-danger" href="/on_unlike/{{project.id}}">Unlike</a>
+        {%else%}
+        <a class="nav-item nav-link text-success" href="/on_like/{{project.id}}">Like</a>
+        {% endif %}
+        {% if project in user.projects_this_user_pinned %}
+        <a class="nav-item nav-link text-danger" href="/on_unpin/{{project.id}}">Unpin</a>
+        {%else%}
+        <a class="nav-item nav-link text-success" href="/on_pin/{{project.id}}">Pin</a>
+        {% endif %}
+        {% endif %}
+    </ul>
+
+    <div class="container mb-5">
+        <!-- project details -->
+        <p>Title: {{project.title}}</p>
+        <p>Description: {{project.description}}</p>
+        <p>Instructions: {{project.instructions}}</p>
+
+        <!-- show comments -->
+        <h3>Comments</h3>
+        {% for comment in comments %}
+        <div>
+            <p>{{comment.content}}</p>
+            <p>Posted by: {{comment.author['username']}}</p>
+            {% if session['userid'] == comment['author_id'] %}
+            <a href="/on_delete_comment/{{project.id}}/{{comment.id}}"><button class="btn btn-danger">Delete</button></a>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+
+        <!-- add comment -->
+        {% if 'userid' in session %}
+        <form action="/on_comment/{{project.id}}" method="post">
+            <h3>Post a Comment</h3>
+            <p>Comment:</p>
+            <input type="text" name="content">
+            <input type="submit" value="Post">
+        </form>
+        {% endif %}
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>
