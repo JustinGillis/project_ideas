@@ -211,11 +211,7 @@ def on_comment(id):
 @app.route('/on_delete_comment/<project>/<id>')
 def on_delete_comment(project, id):
     existing_user = User.query.get(session['userid'])
-    comments = Comment.query.all()
     comment = Comment.query.get(id)
-    print('comments:', comments)
-    print('comment:', comment)
-    print('*'*20)
     existing_user.user_comments.remove(comment)
     db.session.commit()
     return redirect('/view_project/' + project)

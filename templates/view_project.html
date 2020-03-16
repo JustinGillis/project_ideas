@@ -25,31 +25,31 @@
                     <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-user-plus"></i> Sign Up
-                        
+
                     </a>
-                        <form action="/on_register" method="post" style="width: 300px;" class="dropdown-menu p-4">
-                            <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" class="form-control" name="username" id="username"
-                                    placeholder="Username">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" name="email" id="email"
-                                    placeholder="example@example.com">
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" name="password" id="password"
-                                    placeholder="Password">
-                            </div>
-                            <div class="form-group">
-                                <label for="confirm_password">Confirm Password</label>
-                                <input type="password" class="form-control" name="confirm_password"
-                                    id="confirm_password" placeholder="Confirm password">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Sign Up</button>
-                        </form>
+                    <form action="/on_register" method="post" style="width: 300px;" class="dropdown-menu p-4">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" name="username" id="username"
+                                placeholder="Username">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" id="email"
+                                placeholder="example@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" name="password" id="password"
+                                placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm Password</label>
+                            <input type="password" class="form-control" name="confirm_password" id="confirm_password"
+                                placeholder="Confirm password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                    </form>
                 </div>
                 <!-- sign in dropdown -->
                 <div class="dropdown show">
@@ -78,7 +78,7 @@
         </div>
     </nav>
 
-    
+
 
     <h1 class="text-center display-3" style="margin: 50px 0;">Dumb Project Ideas</h1>
 
@@ -106,20 +106,27 @@
         {% endif %}
     </ul>
 
-    <div class="container mb-5">
-        <!-- project details -->
-        <p>Title: {{project.title}}</p>
-        <p>Description: {{project.description}}</p>
-        <p>Instructions: {{project.instructions}}</p>
+    <div class="container m-5 justify-content-center">
+
+        <div class="d-flex justify-content-center">
+            <!-- project details -->
+            <img class="center" src="/static/img/{{project.image}}" alt="">
+        </div>
+        <h1 class="text-center">{{project.title}}</h1>
+        <h3 class="text-center mb-5">{{project.description}}</h3>
+        <h4 class="">Instructions:</h4>
+        <h6 class="mb-5">{{project.instructions}}</h6>
+
 
         <!-- show comments -->
-        <h3>Comments</h3>
+        <h4>Comments</h4>
         {% for comment in comments %}
-        <div>
+        <div class="m-2 p-2 border rounded shadow-sm" style="display: inline-block; width: 50%">
             <p>{{comment.content}}</p>
-            <p>Posted by: {{comment.author['username']}}</p>
+            <small>Posted by: {{comment.author['username']}}</small>
             {% if session['userid'] == comment['author_id'] %}
-            <a href="/on_delete_comment/{{project.id}}/{{comment.id}}"><button class="btn btn-danger">Delete</button></a>
+            <a class="ml-3" href="/on_delete_comment/{{project.id}}/{{comment.id}}"><button
+                    class="btn btn-sm btn-danger">Delete</button></a>
             {% endif %}
         </div>
         {% endfor %}
@@ -128,12 +135,15 @@
         <!-- add comment -->
         {% if 'userid' in session %}
         <form action="/on_comment/{{project.id}}" method="post">
-            <h3>Post a Comment</h3>
-            <p>Comment:</p>
-            <input type="text" name="content">
-            <input type="submit" value="Post">
+            <div class="form-group mt-5" style="width: 50%;">
+                <h4>Post a Comment</h4>
+                <input class="form-control" type="text" name="content" placeholder="Comment">
+            </div>
+
+            <input class="btn btn-primary" type="submit" value="Post">
         </form>
         {% endif %}
+
     </div>
 
 
