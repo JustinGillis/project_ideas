@@ -25,31 +25,31 @@
                     <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-user-plus"></i> Sign Up
-                        
+
                     </a>
-                        <form action="/on_register" method="post" style="width: 300px;" class="dropdown-menu p-4">
-                            <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" class="form-control" name="username" id="username"
-                                    placeholder="Username">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" name="email" id="email"
-                                    placeholder="example@example.com">
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" name="password" id="password"
-                                    placeholder="Password">
-                            </div>
-                            <div class="form-group">
-                                <label for="confirm_password">Confirm Password</label>
-                                <input type="password" class="form-control" name="confirm_password"
-                                    id="confirm_password" placeholder="Confirm password">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Sign Up</button>
-                        </form>
+                    <form action="/on_register" method="post" style="width: 300px;" class="dropdown-menu p-4">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" name="username" id="username"
+                                placeholder="Username">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" id="email"
+                                placeholder="example@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" name="password" id="password"
+                                placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm Password</label>
+                            <input type="password" class="form-control" name="confirm_password" id="confirm_password"
+                                placeholder="Confirm password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                    </form>
                 </div>
                 <!-- sign in dropdown -->
                 <div class="dropdown show">
@@ -77,11 +77,11 @@
             </div>
         </div>
     </nav>
-<!-- add in nav bar for profile controlls
+    <!-- add in nav bar for profile controlls
     <a class="navbar-brand" href="#">
     <i class="far fa-user-circle"></i>
 </a> -->
-    
+
 
     <h1 class="text-center display-3" style="margin: 50px 0;">Dumb Project Ideas</h1>
 
@@ -96,91 +96,103 @@
         <a class="nav-item nav-link active" href="/">All Projects</a>
         <!-- <a class="nav-item nav-link" href="/">Link</a> -->
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Order By</a>
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                aria-expanded="false">Order By</a>
             <div class="dropdown-menu">
-              <a class="dropdown-item active">Most Likes</a>
-              <a class="dropdown-item" href="/Order_by_date">Newest</a>
+                <a class="dropdown-item active">Most Likes</a>
+                <a class="dropdown-item" href="/Order_by_date">Newest</a>
             </div>
-          </li>
+        </li>
     </ul>
 
     <div class="justify-content-center m-5" style="width: 100%;">
-    {% if 'userid' in session %}
-        <div class="container justify-content-center" >
+        {% if 'userid' in session %}
+        <div class="container justify-content-center">
             <div class="row row-cols-1 row-cols-sm-2 row cols-md-4">
                 {% if users_pinned_projects|length > 0 %}
-                    {% for project in users_pinned_projects %}
-                        <div class="col">
-                            <div class="card border-secondary  mb-5" style="width: 18rem; cursor: pointer;"
-                                onclick="location.href='/view_project/{{project.id}}';">
-                                <img class="card-img-top" src="/static/img/{{project.image}}" alt="Card image cap">
-                                <div class="card-body">
-                                    <p class="text-center text-muted">Pinned</p>
-                                    <h5 class="card-title text-center">{{project.title}}</h5>
-                                    <p class="card-text">{{project.description}}</p>
-                                    <p class="card-text text-muted">Created by: {{project.author['username']}}</p>
-                                    {% if project.users_who_like_this_project|length > 1 %}
-                                    <p class="text-right text-muted">{{project.users_who_like_this_project|length}} Likes</p>
-                                    {% endif %}
-                                    {% if project.users_who_like_this_project|length == 1 %}
-                                    <p class="text-right text-muted">{{project.users_who_like_this_project|length}} Like</p>
-                                    {% endif %}
-                                </div>
-                            </div>
+                {% for project in users_pinned_projects %}
+                <div class="col">
+                    <div class="card border-secondary  mb-5" style="width: 18rem; cursor: pointer;"
+                        onclick="location.href='/view_project/{{project.id}}';">
+                        <img class="card-img-top" src="/static/img/{{project.image}}" alt="Card image cap">
+                        <div class="card-body">
+                            <a href="/on_unpin/{{project.id}}"><i class="fas fa-thumbtack"></i> <small>Unpin</small></a>
+                            <h5 class="card-title text-center">{{project.title}}</h5>
+                            <p class="card-text">{{project.description}}</p>
+                            <p class="card-text text-muted">Created by: {{project.author['username']}}</p>
+                            {% if project in user.projects_this_user_likes %}
+                            <a class="d-inline nav-item nav-link text-danger" href="/on_unlike/{{project.id}}"><i class="far fa-thumbs-down"></i></a>
+                            {%else%}
+                            <a class="d-inline nav-item nav-link text-success" href="/on_like/{{project.id}}"><i class="far fa-thumbs-up"></i></a>
+                            {% endif %}
+                            {% if project.users_who_like_this_project|length > 1 %}
+                            <p class="d-inline text-right text-muted">{{project.users_who_like_this_project|length}} Likes</p>
+                            {% endif %}
+                            {% if project.users_who_like_this_project|length == 1 %}
+                            <p class="d-inline text-right text-muted">{{project.users_who_like_this_project|length}} Like</p>
+                            {% endif %}
                         </div>
-                    {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
                 {% endif %}
                 {% for project in projects %}
-                    {% if project not in users_pinned_projects %}
-                        <div class="col">
-                            <div class="card border-secondary  mb-5" style="width: 18rem; cursor: pointer;"
-                                onclick="location.href='/view_project/{{project.id}}';">
-                                <img class="card-img-top" src="/static/img/{{project.image}}" alt="Card image cap">
-                                <div class="card-body">
-                                    <h5 class="card-title text-center">{{project.title}}</h5>
-                                    <p class="card-text">{{project.description}}</p>
-                                    <p class="card-text text-muted">Created by: {{project.author['username']}}</p>
-                                    {% if project.users_who_like_this_project|length > 1 %}
-                                    <p class="text-right text-muted">{{project.users_who_like_this_project|length}} Likes</p>
-                                    {% endif %}
-                                    {% if project.users_who_like_this_project|length == 1 %}
-                                    <p class="text-right text-muted">{{project.users_who_like_this_project|length}} Like</p>
-                                    {% endif %}
-                                </div>
-                            </div>
+                {% if project not in users_pinned_projects %}
+                <div class="col">
+                    <div class="card border-secondary  mb-5" style="width: 18rem; cursor: pointer;"
+                        onclick="location.href='/view_project/{{project.id}}';">
+                        <img class="card-img-top" src="/static/img/{{project.image}}" alt="Card image cap">
+                        <div class="card-body">
+                            <a href="/on_pin/{{project.id}}"><i class="fas fa-thumbtack"></i> <small>Pin</small></a>
+                            <h5 class="card-title text-center">{{project.title}}</h5>
+                            <p class="card-text">{{project.description}}</p>
+                            <p class="card-text text-muted">Created by: {{project.author['username']}}</p>
+                            {% if project in user.projects_this_user_likes %}
+                            <a class="d-inline nav-item nav-link text-danger" href="/on_unlike/{{project.id}}"><i class="far fa-thumbs-down"></i></a>
+                            {%else%}
+                            <a class="d-inline nav-item nav-link text-success" href="/on_like/{{project.id}}"><i class="far fa-thumbs-up"></i></a>
+                            {% endif %}
+                            {% if project.users_who_like_this_project|length > 1 %}
+                            <p class="d-inline text-right text-muted">{{project.users_who_like_this_project|length}} Likes</p>
+                            {% endif %}
+                            {% if project.users_who_like_this_project|length == 1 %}
+                            <p class="d-inline text-right text-muted">{{project.users_who_like_this_project|length}} Like</p>
+                            {% endif %}
                         </div>
-                    {% endif %}
+                    </div>
+                </div>
+                {% endif %}
                 {% endfor %}
             </div>
-        </div> 
+        </div>
 
-    {% else %} 
+        {% else %}
 
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row cols-md-4">
                 {% for project in projects %}
-                    <div class="col">
-                        <div class="card border-secondary  mb-5" style="width: 18rem; cursor: pointer;"
-                            onclick="location.href='/view_project/{{project.id}}';">
-                            <img class="card-img-top" src="/static/img/{{project.image}}" alt="Card image cap">
-                            <div class="card-body">
-                                <h5 class="card-title text-center">{{project.title}}</h5>
-                                <p class="card-text">{{project.description}}</p>
-                                <p class="card-text">Created by: {{project.author['username']}}</p>
-                                {% if project.users_who_like_this_project|length > 1 %}
-                                <p class="text-right text-muted">{{project.users_who_like_this_project|length}} Likes</p>
-                                {% endif %}
-                                {% if project.users_who_like_this_project|length == 1 %}
-                                <p class="text-right text-muted">{{project.users_who_like_this_project|length}} Like</p>
-                                {% endif %}
-                            </div>
+                <div class="col">
+                    <div class="card border-secondary  mb-5" style="width: 18rem; cursor: pointer;"
+                        onclick="location.href='/view_project/{{project.id}}';">
+                        <img class="card-img-top" src="/static/img/{{project.image}}" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">{{project.title}}</h5>
+                            <p class="card-text">{{project.description}}</p>
+                            <p class="card-text">Created by: {{project.author['username']}}</p>
+                            {% if project.users_who_like_this_project|length > 1 %}
+                            <p class="d-inline text-right text-muted">{{project.users_who_like_this_project|length}} Likes</p>
+                            {% endif %}
+                            {% if project.users_who_like_this_project|length == 1 %}
+                            <p class="d-inline text-right text-muted">{{project.users_who_like_this_project|length}} Like</p>
+                            {% endif %}
                         </div>
                     </div>
-                {% endfor %}  
+                </div>
+                {% endfor %}
             </div>
         </div>
-      
-    {% endif %}
+
+        {% endif %}
     </div>
 
     <!-- boostrap stuff -->

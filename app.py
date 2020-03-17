@@ -127,7 +127,7 @@ def on_pin(id):
     existing_user.projects_this_user_pinned.append(existing_project)
     db.session.commit()
     print('on pin complete')
-    return redirect('/view_project/' + id)
+    return redirect('/')
 
 @app.route('/on_unpin/<id>')
 def on_unpin(id):
@@ -135,7 +135,7 @@ def on_unpin(id):
     existing_user = User.query.get(session['userid'])
     existing_user.projects_this_user_pinned.remove(existing_project)
     db.session.commit()
-    return redirect('/view_project/' + id)
+    return redirect('/')
 
 @app.route('/my_projects')
 def my_projects():
@@ -189,7 +189,7 @@ def on_like(id):
     existing_project.num_likes +=1
     db.session.commit()
     print('on like complete')
-    return redirect('/view_project/' + id)
+    return redirect('/')
 
 @app.route('/on_unlike/<id>')
 def on_unlike(id):
@@ -199,7 +199,7 @@ def on_unlike(id):
     db.session.commit()
     existing_project.num_likes -=1
     db.session.commit()
-    return redirect('/view_project/' + id)
+    return redirect('/')
 
 @app.route('/on_comment/<id>', methods=['POST'])
 def on_comment(id):
