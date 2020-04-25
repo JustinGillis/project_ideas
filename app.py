@@ -62,28 +62,6 @@ class Comment(db.Model):
     updated_at = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
 
 
-
-# TODO STEPS
-# fix delete comment code
-# add icons? - thumbs up and down like/unlike buttons on project card
-# fix responsive nav bar
-# style view project page, maybe add more info like created at
-# change posistion of card text
-# modularize
-# add validations to forms and manual url
-
-# TODO BACKLOG
-# add option and fuctionality to add profile pics and show them somewhere
-# add follower code to user class
-# add categories class and fuctionality
-# add option to follow user on single user page
-# add single user view page with user stats (does showing the users projects here make sense?)
-# change created by: text to a link to single user view page
-# add jquery
-# add os files for user uploads
-# can repurpose into a site where ppl vote on project ideas so people can see if they should do them or not
-
-
 @app.route('/on_register', methods=['POST'])
 def on_register():
     is_valid = True
