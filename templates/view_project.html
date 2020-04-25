@@ -80,7 +80,7 @@
 
 
 
-    <h1 class="text-center display-3" style="margin: 50px 0;">Dumb Project Ideas</h1>
+    <h1 class="text-center display-3" style="margin: 50px 0;">Project Ideas</h1>
 
     <!-- main content nav bar tabs -->
     <ul class="nav nav-tabs justify-content-center" style="margin-bottom: 40px;">
@@ -92,32 +92,17 @@
         {% endif %}
         <a class="nav-item nav-link" href="/">All Projects</a>
         <a class="nav-item nav-link active" href="/view_project/{{project.id}}">{{project.title}}</a>
-        {% if 'userid' in session %}
-        {% if project in user.projects_this_user_likes %}
-        <a class="nav-item nav-link text-danger" href="/on_unlike/{{project.id}}">Unlike</a>
-        {%else%}
-        <a class="nav-item nav-link text-success" href="/on_like/{{project.id}}">Like</a>
-        {% endif %}
-        {% if project in user.projects_this_user_pinned %}
-        <a class="nav-item nav-link text-danger" href="/on_unpin/{{project.id}}">Unpin</a>
-        {%else%}
-        <a class="nav-item nav-link text-success" href="/on_pin/{{project.id}}">Pin</a>
-        {% endif %}
-        {% endif %}
     </ul>
 
-    <div class="container m-5 justify-content-center">
-
-        <div class="d-flex justify-content-center">
-            <!-- project details -->
-            <img class="center" src="/static/img/{{project.image}}" alt="">
-        </div>
-        <h1 class="text-center">{{project.title}}</h1>
-        <h3 class="text-center mb-5">{{project.description}}</h3>
+    <div class="d-flex justify-content-center">
+        <!-- project details -->
+        <img class="mb-3 center" src="/static/img/{{project.image}}" alt="">
+    </div>
+    <h1 class="text-center">{{project.title}}</h1>
+    <h3 class="text-center mb-5">{{project.description}}</h3>
+    <div class="container">
         <h4 class="">Instructions:</h4>
         <h6 class="mb-5">{{project.instructions}}</h6>
-
-
         <!-- show comments -->
         <h4>Comments</h4>
         {% for comment in comments %}
@@ -143,8 +128,12 @@
             <input class="btn btn-primary" type="submit" value="Post">
         </form>
         {% endif %}
-
     </div>
+
+
+
+
+
 
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

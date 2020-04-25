@@ -148,7 +148,7 @@ def Order_by_date():
         user = User.query.get(session['userid'])
         users_pinned_projects = user.projects_this_user_pinned
         projects = Project.query.order_by(Project.id.desc()).all()
-        return render_template('ordered_by_date.html', projects=projects, users_pinned_projects=users_pinned_projects)
+        return render_template('ordered_by_date.html', user=user, projects=projects, users_pinned_projects=users_pinned_projects)
     else:
         projects = Project.query.order_by(Project.id.desc()).all()
         return render_template('ordered_by_date.html', projects=projects)
@@ -215,8 +215,6 @@ def on_delete_comment(project, id):
     existing_user.user_comments.remove(comment)
     db.session.commit()
     return redirect('/view_project/' + project)
-
-
 
 @app.route('/on_logout')
 def logout():

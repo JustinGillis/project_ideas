@@ -1,4 +1,5 @@
-# Dumb Project Ideas
+# Project Ideas
+![Project Ideas Image](https://i.ibb.co/xXPZXP3/projectideasdisplay.png)
 ___
 
 **MVP**
@@ -13,5 +14,5 @@ ___
 **BACKLOG**
 * [ ] extra styling
 * [ ] modularize
-* [ ] add user profile are with profile picture
+* [ ] add user profile area with profile picture
 * [ ] can edit users projects

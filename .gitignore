@@ -1,7 +1,10 @@
-my_environments/
 *.txt
 *.zip
 *.db
+*.pyc
 __pycache__
 vscode/
 migrations/
+.gitignore
+wireframe.png
+img/
